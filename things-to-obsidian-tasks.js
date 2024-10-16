@@ -193,21 +193,21 @@
   app.doShellScript(`mkdir -p projects`);
   // I don't have to include the Anytime and Someday list in the same way
   // because I don't have any ToDos outside of Projects or Areas.
-  Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
-    console.log(`Processing... ${proj.name()}`)
+  const listToFile = function(obj) {
+    console.log(`Processing... ${obj.name()}`)
 
     let attributes = [];
 
     // FIXME: Why can't I just use ISOdate() here?
-    if (proj.dueDate() != null) {
-      attributes.push(`due: ${proj.dueDate().toISOString().split("T")[0]}`);
+    if (obj.dueDate() != null) {
+      attributes.push(`due: ${obj.dueDate().toISOString().split("T")[0]}`);
     }
 
     // Nothing has tags atm.
     //if (tags > 0) {
     //  attributes.push(`tags:\n${tags.join("\n").map(s => `- ${s}`)}`)
     //}
-    attributes.push(`tags:\n- projects`)
+    attributes.push(`tags:\n- objects`)
 
     attributes = attributes.join("\n")
 
@@ -215,13 +215,14 @@
       attributes = `---\n${attributes}\n---\n`
     }
 
-    let tasks = proj.toDos().map(function(t) {
+    let tasks = obj.toDos().map(function(t) {
       return task(t)
     })
     .join("\n")
 
-    let template = `${attributes}${proj.notes()}\n${tasks}`
+    let template = `${attributes}${obj.notes()}\n${tasks}`
 
-    writeTextToFile(template, `projects/${proj.name()}.md`)
-  })
+    writeTextToFile(template, `objects/${obj.name()}.md`)
+  }
+  Things.projects().filter(p => p.status() == "open").forEach(proj => listToFile(proj))
 })();
