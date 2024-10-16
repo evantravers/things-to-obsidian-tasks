@@ -58,9 +58,9 @@
   }
 
   const computeTag = function(tags, tag) {
-    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}.${tag.name()}`; }
+    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}/#${tag.name()}`; }
 
-    return tag.name();
+    return `#${tag.name()}`;
   }
 
   const addTag = function(task, tag) {
