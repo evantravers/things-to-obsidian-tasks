@@ -175,7 +175,8 @@
   let areas    = [];
   let projects = [];
 
-  Things.toDos().slice(0,10).forEach(function(toDo) {
+  // TODO: Check to see if this "task" exists already to detect tasks with repetition
+  Things.toDos().forEach(function(toDo) {
     let task = {
       name: toDo.name(),
       tags: [],
@@ -190,31 +191,37 @@
     addDue(task, toDo)
     addScheduled(task, toDo)
 
-    console.log(renderTask(task))
-
     tasks.push(task)
   })
 
   app.doShellScript(`mkdir -p projects`);
+  // TODO: Include Headers
+  // I don't have to include the Anytime and Someday list in the same way
+  // because I don't have any ToDos outside of Projects or Areas.
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
     let obj = {};
     addDue(obj, proj);
     addTags(obj, proj);
 
-    let attr = "";
+    let attributes = [];
 
-    for (let k in obj) {
-      attr = attr + `\n${k}: ${obj[k]}`
+    if (obj.due != undefined) {
+      attributes.push(`due: ${obj.due}`);
     }
 
-    let template = `---${attr}
----
+    if (obj.tags && obj.tags != []) {
+      attributes.push(`tags:\n${obj.tags.join("\n").map(s => `- ${s}`)}`)
+    }
 
-# ${proj.name()}
+    attributes = attributes.join("\n")
 
-${proj.notes()}
+    if (attributes != "") {
+      attributes.lpad("---\n").rpad("\n---")
+    }
 
-`
+    let template = `${attributes}${proj.notes()}`
+
+    console.log(template)
     writeTextToFile(template, `projects/${proj.name()}.md`)
   })
 })();
