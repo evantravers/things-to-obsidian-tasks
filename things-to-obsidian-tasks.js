@@ -172,7 +172,7 @@
 
   Things.launch();
 
-  const buildTask = function(toDo) {
+  const task = function(toDo) {
     let task = {
       name: toDo.name(),
       tags: [],
@@ -186,17 +186,11 @@
 
     addDue(task, toDo)
     addScheduled(task, toDo)
+
+    return renderTask(task)
   }
 
-  // TODO: Check to see if this "task" exists already to detect tasks with repetition
-  Things.toDos().forEach(function(toDo) {
-    task = buildTask(toDo)
-
-    tasks.push(task)
-  })
-
   app.doShellScript(`mkdir -p projects`);
-  // TODO: Include Headers
   // I don't have to include the Anytime and Someday list in the same way
   // because I don't have any ToDos outside of Projects or Areas.
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
@@ -219,7 +213,12 @@
       attributes = `---\n${attributes}\n---\n`
     }
 
-    let template = `${attributes}${proj.notes()}`
+    let tasks = proj.toDos().map(function(t) {
+      return task(t)
+    })
+    .join("\n")
+
+    let template = `${attributes}${proj.notes()}\n${tasks}`
 
     writeTextToFile(template, `projects/${proj.name()}.md`)
   })
