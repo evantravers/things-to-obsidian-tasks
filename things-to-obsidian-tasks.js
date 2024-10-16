@@ -58,9 +58,18 @@
   }
 
   const computeTag = function(tags, tag) {
-    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}/#${tag.name()}`; }
+    let label =
+      tag.name()
+      .replace("<1h", "30m")
+      .replace(/@/g, "")
+      .replace(/:/g, "")
+      .replace(/$/g, "")
+      .replace(/ /g, "")
+      .replace(/[^a-zA-Z0-9_@.]/g, "")
 
-    return `#${tag.name()}`;
+    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}/#${label}`; }
+
+    return `#${label}`;
   }
 
   const addTag = function(task, tag) {
@@ -166,7 +175,7 @@
   let areas    = [];
   let projects = [];
 
-  Things.toDos().forEach(function(toDo) {
+  Things.toDos().slice(0,10).forEach(function(toDo) {
     let task = {
       name: toDo.name(),
       tags: [],
