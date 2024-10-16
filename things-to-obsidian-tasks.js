@@ -172,12 +172,7 @@
 
   Things.launch();
 
-  let tasks    = [];
-  let areas    = [];
-  let projects = [];
-
-  // TODO: Check to see if this "task" exists already to detect tasks with repetition
-  Things.toDos().forEach(function(toDo) {
+  const buildTask = function(toDo) {
     let task = {
       name: toDo.name(),
       tags: [],
@@ -191,6 +186,11 @@
 
     addDue(task, toDo)
     addScheduled(task, toDo)
+  }
+
+  // TODO: Check to see if this "task" exists already to detect tasks with repetition
+  Things.toDos().forEach(function(toDo) {
+    task = buildTask(toDo)
 
     tasks.push(task)
   })
@@ -200,7 +200,7 @@
   // I don't have to include the Anytime and Someday list in the same way
   // because I don't have any ToDos outside of Projects or Areas.
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
-    console.log(proj.name())
+    console.log(`Processing... ${proj.name()}`)
 
     let attributes = [];
 
