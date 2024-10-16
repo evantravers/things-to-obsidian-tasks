@@ -52,15 +52,24 @@
     })
     .join("\n")
 
-    if (checklist != "") { addAnnotation(task, "Checklist:\n" + checklist) }
+    if (checklist != "") { task.checklist = `\n${checklist.replace(/^/gm, "  ")}` }
 
-    if (clipboard.match("When: Someday")) { scheduledSomeday(task) }
+    if (clipboard.match("When: Someday")) { addTag(task, "Someday") }
   }
 
   const computeTag = function(tags, tag) {
     if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}.${tag.name()}`; }
 
     return tag.name();
+  }
+
+  const addTag = function(task, tag) {
+    if (Array.isArray(task.tags)) {
+      task.tags.push(tag)
+    }
+    else {
+      task.tags = [tag];
+    }
   }
 
   const addTags = function(task, toDo) {
@@ -148,7 +157,7 @@
     addTags(task, toDo)
     addProject(task, toDo)
 
-    //processClipboard(task, toDo)
+    processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
