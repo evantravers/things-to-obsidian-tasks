@@ -52,9 +52,9 @@
     })
     .join("\n")
 
-    if (checklist != "") { task.checklist = `\n${checklist.replace(/^/gm, "  ")}` }
+    if (checklist != "") { task.checklist = checklist.replace(/^/gm, "  ") }
 
-    if (clipboard.match("When: Someday")) { addTag(task, "Someday") }
+    if (clipboard.match("When: Someday")) { addTag(task, "#Someday") }
   }
 
   const computeTag = function(tags, tag) {
@@ -73,13 +73,11 @@
   }
 
   const addTags = function(task, toDo) {
-    let tags = [];
+    let tags = task.tags;
 
     if (toDo.tags().length > 0) {
       toDo.tags().forEach(tag => tags.push(computeTag(tags, tag)))
     }
-
-    if (tags.length > 0) { task.tags = ` ${tags}` };
   }
 
   const addProject = function(task, toDo) {
@@ -105,15 +103,40 @@
   }
 
   const addNotes = function(task, toDo) {
-    if (toDo.notes()) { task.notes = `\n${toDo.notes()}`}
+    if (toDo.notes()) { task.notes = toDo.notes() }
   }
 
   const addDue = function(task, toDo) {
-    if (toDo.dueDate()) { task.due = ` ${ISOdate(toDo.dueDate())}` }
+    if (toDo.dueDate()) { task.due = ISOdate(toDo.dueDate()) }
   }
 
   const addScheduled = function(task, toDo) {
-    if (toDo.activationDate()) { task.scheduled = ` ${ISOdate(toDo.activationDate())}` }
+    if (toDo.activationDate()) { task.scheduled = ISOdate(toDo.activationDate()) }
+  }
+
+  const renderTags = function(task) {
+    if (task.tags.length > 0) {
+      return ` ${task.tags.join(" ")}`
+    } else { return "" }
+  }
+
+  const renderDate = function(label, date) {
+    if (date) {
+      return ` [${label}:: ${date}]`
+    }
+    else {
+      return ""
+    }
+  }
+
+  const renderNotes = function(task) {
+    if (task.notes) {
+      return `\n${task.notes}`
+    } else { return "" }
+  }
+  const renderList = function(task) {
+    if (task.checklist) { return `\n${task.checklist}` }
+    else { return "" }
   }
 
   const writeTextToFile = function(text, file) {
@@ -134,7 +157,7 @@
   }
 
   const renderTask = function(task) {
-    return `- [ ] ${task.name}${task.tags}${task.scheduled}${task.due}${task.notes}${task.checklist}`
+    return `- [ ] ${task.name}${renderTags(task)}${renderDate("scheduled", task.scheduled)}${renderDate("due", task.due)}${renderNotes(task)}${renderList(task)}`
   }
 
   Things.launch();
@@ -146,11 +169,7 @@
   Things.toDos().forEach(function(toDo) {
     let task = {
       name: toDo.name(),
-      notes : "",
-      due: "",
-      tags: "",
-      scheduled: "",
-      checklist: ""
+      tags: [],
     }
 
     addNotes(task, toDo)
