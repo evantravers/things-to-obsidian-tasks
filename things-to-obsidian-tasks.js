@@ -57,6 +57,7 @@
     if (clipboard.match("When: Someday")) { addTag(task, "#Someday") }
   }
 
+  // FIXME: Does this function actually use `tags` anywhere?
   const computeTag = function(tags, tag) {
     let label =
       tag.name()
@@ -186,7 +187,7 @@
     addTags(task, toDo)
     addProject(task, toDo)
 
-    processClipboard(task, toDo)
+    //processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
@@ -199,29 +200,27 @@
   // I don't have to include the Anytime and Someday list in the same way
   // because I don't have any ToDos outside of Projects or Areas.
   Things.projects().filter(p => p.status() == "open").forEach(function(proj) {
-    let obj = {};
-    addDue(obj, proj);
-    addTags(obj, proj);
+    console.log(proj.name())
 
     let attributes = [];
 
-    if (obj.due != undefined) {
-      attributes.push(`due: ${obj.due}`);
+    // FIXME: Why can't I just use ISOdate() here?
+    if (proj.dueDate() != null) {
+      attributes.push(`due: ${proj.dueDate().toISOString().split("T")[0]}`);
     }
 
-    if (obj.tags && obj.tags != []) {
-      attributes.push(`tags:\n${obj.tags.join("\n").map(s => `- ${s}`)}`)
+    if (proj.tags().length > 0) {
+      attributes.push(`tags:\n${proj.tags().join("\n").map(s => `- ${s}`)}`)
     }
 
     attributes = attributes.join("\n")
 
     if (attributes != "") {
-      attributes.lpad("---\n").rpad("\n---")
+      attributes = `---\n${attributes}\n---\n`
     }
 
     let template = `${attributes}${proj.notes()}`
 
-    console.log(template)
     writeTextToFile(template, `projects/${proj.name()}.md`)
   })
 })();
