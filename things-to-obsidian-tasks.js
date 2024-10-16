@@ -182,7 +182,7 @@
     addTags(task, toDo)
     addProject(task, toDo)
 
-    //processClipboard(task, toDo)
+    processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
@@ -203,9 +203,11 @@
       attributes.push(`due: ${proj.dueDate().toISOString().split("T")[0]}`);
     }
 
-    if (proj.tags().length > 0) {
-      attributes.push(`tags:\n${proj.tags().join("\n").map(s => `- ${s}`)}`)
-    }
+    // Nothing has tags atm.
+    //if (tags > 0) {
+    //  attributes.push(`tags:\n${tags.join("\n").map(s => `- ${s}`)}`)
+    //}
+    attributes.push(`tags:\n- projects`)
 
     attributes = attributes.join("\n")
 
