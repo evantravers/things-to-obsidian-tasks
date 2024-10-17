@@ -225,4 +225,5 @@
     writeTextToFile(template, `objects/${obj.name()}.md`)
   }
   Things.projects().filter(p => p.status() == "open").forEach(proj => listToFile(proj))
+  Things.areas().forEach(area => listToFile(area))
 })();
