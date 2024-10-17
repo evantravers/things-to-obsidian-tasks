@@ -198,7 +198,6 @@
     let attributes = [];
 
     try {
-      // FIXME: Why can't I just use ISOdate() here?
       if (obj.dueDate() != null) {
         attributes.push(`due: ${ISOdate(obj.dueDate())}`);
       }
