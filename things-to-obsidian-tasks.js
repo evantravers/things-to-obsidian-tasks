@@ -181,7 +181,7 @@
     addTags(task, toDo)
     addProject(task, toDo)
 
-    //processClipboard(task, toDo)
+    processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
@@ -210,7 +210,7 @@
     //if (tags > 0) {
     //  attributes.push(`tags:\n${tags.join("\n").map(s => `- ${s}`)}`)
     //}
-    attributes.push(`tags:\n- objects`)
+    attributes.push(`tags:\n- projects`)
 
     attributes = attributes.join("\n")
 
@@ -233,7 +233,7 @@
 
     let template = `${attributes}${notes}\n${tasks}`
 
-    writeTextToFile(template, `objects/${obj.name()}.md`)
+    writeTextToFile(template, `projects/${obj.name()}.md`)
   }
   Things.projects().filter(p => p.status() == "open").forEach(proj => listToFile(proj))
   Things.areas().forEach(area => listToFile(area))
