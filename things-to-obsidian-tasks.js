@@ -236,5 +236,8 @@
     writeTextToFile(template, `projects/${obj.name()}.md`)
   }
   Things.projects().filter(p => p.status() == "open").forEach(proj => listToFile(proj))
+  // FIXME: Technically a Project is a toDo in a area. I want to detect if it's
+  // an instanceOf Project and then make it a [[link]] in the name and note
+  // include it's notes
   Things.areas().forEach(area => listToFile(area))
 })();
