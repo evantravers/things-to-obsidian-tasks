@@ -58,7 +58,7 @@
   }
 
   // FIXME: Does this function actually use `tags` anywhere?
-  const computeTag = function(tags, tag) {
+  const computeTag = function(tag) {
     let label =
       tag.name()
       .replace("<1h", "30m")
@@ -68,7 +68,7 @@
       .replace(/ /g, "")
       .replace(/[^a-zA-Z0-9_@.]/g, "")
 
-    if (tag.parentTag()) { return `${computeTag(tags, tag.parentTag())}/#${label}`; }
+    if (tag.parentTag()) { return `${computeTag(tag.parentTag())}/#${label}`; }
 
     return `#${label}`;
   }
@@ -86,7 +86,7 @@
     let tags = task.tags;
 
     if (toDo.tags().length > 0) {
-      toDo.tags().forEach(tag => tags.push(computeTag(tags, tag)))
+      toDo.tags().forEach(tag => tags.push(computeTag(tag)))
     }
   }
 
