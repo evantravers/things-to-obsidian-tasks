@@ -57,7 +57,6 @@
     if (clipboard.match("When: Someday")) { addTag(task, "#Someday") }
   }
 
-  // FIXME: Does this function actually use `tags` anywhere?
   const computeTag = function(tag) {
     let label =
       tag.name()
