@@ -181,7 +181,7 @@
     addTags(task, toDo)
     addProject(task, toDo)
 
-    processClipboard(task, toDo)
+    //processClipboard(task, toDo)
 
     addDue(task, toDo)
     addScheduled(task, toDo)
@@ -197,9 +197,14 @@
 
     let attributes = [];
 
-    // FIXME: Why can't I just use ISOdate() here?
-    if (obj.dueDate() != null) {
-      attributes.push(`due: ${obj.dueDate().toISOString().split("T")[0]}`);
+    try {
+      // FIXME: Why can't I just use ISOdate() here?
+      if (obj.dueDate() != null) {
+        attributes.push(`due: ${ISOdate(obj.dueDate())}`);
+      }
+    }
+    catch {
+      console.log("Not a project...")
     }
 
     // Nothing has tags atm.
@@ -219,7 +224,15 @@
     })
     .join("\n")
 
-    let template = `${attributes}${obj.notes()}\n${tasks}`
+    let notes = "";
+    try {
+      let notes = obj.notes()
+    }
+    catch {
+      console.log("No notes...")
+    }
+
+    let template = `${attributes}${notes}\n${tasks}`
 
     writeTextToFile(template, `objects/${obj.name()}.md`)
   }
