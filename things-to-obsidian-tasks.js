@@ -108,7 +108,7 @@
   }
 
   const ISOdate = function(date) {
-    date.toISOString().split("T")[0];
+    return date.toISOString().split("T")[0];
   }
 
   const addNotes = function(task, toDo) {
