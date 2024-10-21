@@ -165,6 +165,7 @@
     }
   }
 
+  // TODO: Could convert my `Rituals` tags into recurrence patterns?
   const renderTask = function(task) {
     return `- [ ] ${task.name}${renderTags(task)}${renderDate("scheduled", task.scheduled)}${renderDate("due", task.due)}${renderNotes(task)}${renderList(task)}`
   }
