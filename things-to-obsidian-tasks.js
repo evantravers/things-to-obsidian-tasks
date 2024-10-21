@@ -67,7 +67,7 @@
       .replace(/ /g, "")
       .replace(/[^a-zA-Z0-9_@.]/g, "")
 
-    if (tag.parentTag()) { return `${computeTag(tag.parentTag())}/#${label}`; }
+    if (tag.parentTag()) { return `${computeTag(tag.parentTag())}/${label}`; }
 
     return `#${label}`;
   }
