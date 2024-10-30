@@ -119,8 +119,8 @@
     if (toDo.dueDate()) { task.due = ISOdate(toDo.dueDate()) }
   }
 
-  const addScheduled = function(task, toDo) {
-    if (toDo.activationDate()) { task.scheduled = ISOdate(toDo.activationDate()) }
+  const addStart = function(task, toDo) {
+    if (toDo.activationDate()) { task.start = ISOdate(toDo.activationDate()) }
   }
 
   const renderTags = function(task) {
@@ -167,7 +167,7 @@
 
   // TODO: Could convert my `Rituals` tags into recurrence patterns?
   const renderTask = function(task) {
-    return `- [ ] ${task.name}${renderTags(task)}${renderDate("scheduled", task.scheduled)}${renderDate("due", task.due)}${renderNotes(task)}${renderList(task)}`
+    return `- [ ] ${task.name}${renderTags(task)}${renderDate("scheduled", task.start)}${renderDate("due", task.due)}${renderNotes(task)}${renderList(task)}`
   }
 
   Things.launch();
@@ -185,7 +185,7 @@
     processClipboard(task, toDo)
 
     addDue(task, toDo)
-    addScheduled(task, toDo)
+    addStart(task, toDo)
 
     return renderTask(task)
   }
